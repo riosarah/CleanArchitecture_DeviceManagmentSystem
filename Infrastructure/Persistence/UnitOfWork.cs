@@ -9,7 +9,7 @@ namespace Infrastructure.Persistence;
 /// </summary>
 public class UnitOfWork(AppDbContext dbContext, 
         ISensorRepository sensors, IMeasurementRepository measurements, IDeviceRepository devices, 
-        IPersonRepository persons, IUsageRepository usages) : IUnitOfWork, IDisposable
+        IPersonRepository persons, ISensorRepository usages) : IUnitOfWork, IDisposable
 {
     private readonly AppDbContext _dbContext = dbContext;
     private bool _disposed;
@@ -27,7 +27,7 @@ public class UnitOfWork(AppDbContext dbContext,
 
     public IDeviceRepository Devices { get; } = devices;
     public IPersonRepository Persons { get; } = persons;
-    public IUsageRepository Usages { get; } = usages;
+    public ISensorRepository Usages { get; } = usages;
     /// <summary>
     /// Persistiert alle Änderungen in die DB. Gibt die Anzahl der betroffenen Zeilen zurück.
     /// </summary>

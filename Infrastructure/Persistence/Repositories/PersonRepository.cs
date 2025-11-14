@@ -12,6 +12,9 @@ namespace Infrastructure.Persistence.Repositories
 {
     public class PersonRepository(AppDbContext ctx) : GenericRepository<Person>(ctx), IPersonRepository
     {
-      
+        public async Task<Person?> GetByNameAndMailAsync(string firstName, string lastName, string mailAddress, CancellationToken ct)
+        {
+            return await ctx.Persons.FirstAsync(e => e.FirstName == firstName && e.LastName == lastName && e.MailAddress == mailAddress, ct);
+        }
     }
 }

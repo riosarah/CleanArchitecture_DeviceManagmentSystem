@@ -9,5 +9,8 @@ public interface IUnitOfWork
 {
     ISensorRepository Sensors { get; }
     IMeasurementRepository Measurements { get; }
+    IDeviceRepository Devices { get; }
+    IPersonRepository Persons { get; }
+    IUsageRepository Usages { get; }
     Task<int> SaveChangesAsync(CancellationToken ct = default);
 }

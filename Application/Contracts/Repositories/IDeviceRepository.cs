@@ -9,5 +9,6 @@ namespace Application.Contracts.Repositories
 {
     public interface IDeviceRepository : IGenericRepository<Device>
     {
+        public Task<Device?> GetByNameAndSerialNrAsync(string name, string serialNr, CancellationToken ct);
     }
 }
