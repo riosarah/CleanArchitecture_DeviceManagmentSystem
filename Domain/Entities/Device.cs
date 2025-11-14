@@ -12,6 +12,19 @@ namespace Domain.Entities
         public string SerialNumber { get; set; } = string.Empty;
         public string NameSerialNumber => $"{Name}-{SerialNumber}";
         public DeviceType type { get; set; }
+        public string DeviceName
+        {
+            get
+            {
+                return type switch
+                {
+                    DeviceType.Smartphone => "Smartphone",
+                    DeviceType.Tablet => "Tablet",
+                    DeviceType.Notebook => "Notebook",
+                    _ => "Unknown Device"
+                };
+            }
+        }
         public enum DeviceType
         {
             Smartphone,

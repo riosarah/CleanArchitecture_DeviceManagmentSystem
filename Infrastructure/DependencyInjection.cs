@@ -25,6 +25,9 @@ public static class DependencyInjection
         // Repositories und UoW (Scoped: pro HTTP-Request eine Instanz)
         services.AddScoped<ISensorRepository, SensorRepository>();
         services.AddScoped<IMeasurementRepository, MeasurementRepository>();
+        services.AddScoped<IDeviceRepository, DeviceRepository>();
+        services.AddScoped<IUsageRepository, UsageRepository>();
+        services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Hosted Service zum initialen Datenimport beim Start der Anwendung

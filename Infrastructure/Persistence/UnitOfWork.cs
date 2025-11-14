@@ -8,7 +8,8 @@ namespace Infrastructure.Persistence;
 /// Unit of Work aggregiert Repositories und speichert Änderungen transaktional.
 /// </summary>
 public class UnitOfWork(AppDbContext dbContext, 
-        ISensorRepository sensors, IMeasurementRepository measurements) : IUnitOfWork, IDisposable
+        ISensorRepository sensors, IMeasurementRepository measurements, IDeviceRepository devices, 
+        IPersonRepository persons, IUsageRepository usages) : IUnitOfWork, IDisposable
 {
     private readonly AppDbContext _dbContext = dbContext;
     private bool _disposed;
@@ -23,9 +24,14 @@ public class UnitOfWork(AppDbContext dbContext,
     /// </summary>
     public IMeasurementRepository Measurements { get; } = measurements;
 
+
+    public IDeviceRepository Devices { get; } = devices;
+    public IPersonRepository Persons { get; } = persons;
+    public IUsageRepository Usages { get; } = usages;
     /// <summary>
     /// Persistiert alle Änderungen in die DB. Gibt die Anzahl der betroffenen Zeilen zurück.
     /// </summary>
+
     public Task<int> SaveChangesAsync(CancellationToken ct = default) => _dbContext.SaveChangesAsync(ct);
 
     /// <summary>
