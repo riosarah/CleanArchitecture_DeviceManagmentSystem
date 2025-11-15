@@ -13,8 +13,8 @@ namespace Infrastructure.Persistence.Repositories
     {
         public async Task<Device?> GetByNameAndSerialNrAsync(string name, string serialNr, CancellationToken ct)
         {
-            return await ctx.Devices.FirstAsync(e=>e.Name == name && e.SerialNumber == serialNr);
-            
+            var result = await ctx.Devices.FirstOrDefaultAsync(e=>e.Name == name && e.SerialNumber == serialNr);
+            return result;
         }
     }
 }
