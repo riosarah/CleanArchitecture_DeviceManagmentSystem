@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Dtos
 {
-    public  sealed record GetDeviceDto(int Id, string Name, string SerialNumber, DeviceType type, string DeviceName)
+    public  sealed record GetDeviceDto(int Id, string Name, string SerialNumber, Domain.Entities.Device.DeviceType type, string DeviceName)
     {
     }
  

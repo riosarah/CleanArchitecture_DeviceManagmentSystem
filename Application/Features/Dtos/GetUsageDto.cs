@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Dtos
 {
-    public sealed record GetUsageDto(int Id, int DeviceId, Device Device, DateTime From, DateTime To, Person Person, int PersonId)
+    public sealed record GetUsageDto(int Id, int DeviceId, Domain.Entities.Device Device, DateTime From, DateTime To, Person Person, int PersonId)
     {
     }
     }
