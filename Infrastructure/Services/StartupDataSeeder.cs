@@ -34,16 +34,16 @@ public class StartupDataSeeder(IOptions<StartupDataSeederOptions> options, IServ
     {
         using var scope = _serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        //await dbContext.Database.MigrateAsync(cancellationToken);
+        await dbContext.Database.MigrateAsync(cancellationToken);
 
         // Nur seeden, wenn noch keine Sensoren existieren (idempotent)
-        if (await dbContext.Sensors.AnyAsync(cancellationToken)) return;
+        //if (await dbContext.Sensors.AnyAsync(cancellationToken)) return;
 
         var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-        var allMeasurements = await ReadMeasurementsFromCsv(uow, cancellationToken);
-        dbContext.Measurements.AddRange(allMeasurements);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        //var allMeasurements = await ReadMeasurementsFromCsv(uow, cancellationToken);
+        //dbContext.Measurements.AddRange(allMeasurements);
+        //await dbContext.SaveChangesAsync(cancellationToken);
 
 
         var Devices = await ReadDevicesFromCsv(uow, cancellationToken);
@@ -139,7 +139,7 @@ public class StartupDataSeeder(IOptions<StartupDataSeederOptions> options, IServ
                 {
                     SerialNumber = parts[0].Trim(),
                     Name = parts[1].Trim(),
-                    type = Enum.Parse<Device.DeviceType>(parts[2].Trim())
+                    Type =  Enum.Parse<Device.DeviceType>(parts[2].Trim())
                 };
                 Devices.Add(device);
                 
@@ -171,17 +171,19 @@ public class StartupDataSeeder(IOptions<StartupDataSeederOptions> options, IServ
 
                 var person = dbContext.Persons.FirstOrDefault(p => p.LastName == parts[3].Trim() && p.FirstName == parts[4].Trim());
                 var device = dbContext.Devices.FirstOrDefault(d => d.SerialNumber == parts[0].Trim());
-                var usage = new Usage
+                if (person is not null && device is not null)
                 {
-                    Person = person,
-                    PersonId = person.Id,
-                    Device = device,
-                    DeviceId = device.Id,
-                    From = DateTime.Parse(parts[6]),
-                    To = DateTime.Parse(parts[7])
-                };
-                Usages.Add(usage);
-
+                    var usage = new Usage
+                    {
+                        Person = person,
+                        PersonId = person.Id,
+                        Device = device,
+                        DeviceId = device.Id,
+                        From = DateTime.Parse(parts[6]),
+                        To = DateTime.Parse(parts[7])
+                    };
+                    Usages.Add(usage);
+                }
             }
             return Usages;
         }
