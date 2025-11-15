@@ -22,7 +22,7 @@ namespace Domain.Entities
             {
                 return Type switch
                 {
-                    DeviceType.Smartphone => "Smartphone",
+                    DeviceType.SmartPhone => "SmartPhone",
                     DeviceType.Tablet => "Tablet",
                     DeviceType.Notebook => "Notebook",
                     _ => "Unknown Device"
@@ -31,13 +31,17 @@ namespace Domain.Entities
         }
         public enum DeviceType
         {
-            Smartphone,
+            SmartPhone,
             Tablet,
             Notebook
         }
 
-        public static async Task<Device> CreateAsync(string name, string serialNumber, DeviceType type)
+        public static async Task<Device> CreateAsync(string name, string serialNumber, 
+            DeviceType type, IDeviceUniquenessChecker uniquenessChecker, CancellationToken ct)
         {
+
+            var trimmedName = name.Trim();
+            var trimmedSN = serialNumber.Trim();
             if (String.IsNullOrWhiteSpace(name))
             {
                 throw new DomainValidationException( nameof(name),"Device name cannot be null or empty.");
@@ -47,6 +51,9 @@ namespace Domain.Entities
                 throw new DomainValidationException("Device", "Device Serialnumber must not be empty");
 
             }
+            ValidateDeviceProperties(trimmedName, trimmedSN, type);
+            await ValidateDeviceUniqueness(0, trimmedName, trimmedSN, type, uniquenessChecker, ct);
+
             return new Device
             {
                 Name = name,
@@ -56,7 +63,7 @@ namespace Domain.Entities
         }
 
         public async Task UpdateAsync(string name, string serialnumber, DeviceType type
-       /*,IDeviceUniquenessChecker uniquenessChecker*/, CancellationToken ct = default)
+       ,IDeviceUniquenessChecker uniquenessChecker, CancellationToken ct = default)
         {
             var trimmedName = name.Trim();
             var trimmedSN = serialnumber.Trim();
@@ -65,7 +72,7 @@ namespace Domain.Entities
                 return;
             }
             ValidateDeviceProperties(trimmedName, trimmedSN, type);
-            //await ValidateDeviceUniqueness(Id,trimmedName, trimmedSN, uniquenessChecker, ct);
+            await ValidateDeviceUniqueness(Id,trimmedName, trimmedSN,type, uniquenessChecker, ct);
             Name = name;
             SerialNumber = serialnumber;
             Type = type;

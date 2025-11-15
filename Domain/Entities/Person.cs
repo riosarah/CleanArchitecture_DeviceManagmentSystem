@@ -21,13 +21,13 @@ namespace Domain.Entities
         public string MailAddress { get; set; } = string.Empty;
 
     
-        public static async Task<Person> CreateAsync(string firstname, string lastname, string emailA
+        public static async Task<Person> CreateAsync(string firstname, string lastname, string emailA,
             IPersonUniquenessChecker uniquenessChecker, CancellationToken ct = default)
         {
             var trimF = firstname.Trim();
             var trimL = lastname.Trim();
             var trimEm = emailA.Trim();
-            ValidatePersonProperty(trimF, trimL, trimEm);
+            ValidatePersonProperties(trimF, trimL, trimEm);
             await ValidatePersonUniqueness(0,trimF, trimL, trimEm, uniquenessChecker, ct);
             return new Person {
                 FirstName = trimF,
@@ -38,7 +38,7 @@ namespace Domain.Entities
         /// <summary>
         /// Aktualisiert die Eigenschaften des Sensors.
         /// </summary>
-        public async Task UpdateAsync(string firstname, string lastname, string emailA
+        public async Task UpdateAsync(string firstname, string lastname, string emailA,
             IPersonUniquenessChecker uniquenessChecker, CancellationToken ct = default)
         {
 
@@ -58,9 +58,9 @@ namespace Domain.Entities
         {
             var validationResults = new List<DomainValidationResult>
         {
-            SensorSpecifications.CheckLocation(location),
-            SensorSpecifications.CheckName(name),
-            SensorSpecifications.CheckNameNotEqualLocation(name, location)
+            PersonSpecifications.CheckFirstName(firstN),
+            PersonSpecifications.CheckLastName(lastN),
+            PersonSpecifications.CheckMailAddress(mailA)
         };
             foreach (var result in validationResults)
             {
@@ -71,7 +71,7 @@ namespace Domain.Entities
             }
         }
         public static async Task ValidatePersonUniqueness(int id, string firstN, string lastN, string mailA, 
-            PersonUniquenessChecker uniquenessChecker, CancellationToken ct = default)
+            IPersonUniquenessChecker uniquenessChecker, CancellationToken ct = default)
         {
             if (!await uniquenessChecker.IsUniqueAsync(id, firstN, lastN, mailA, ct))
                 throw new DomainValidationException("Uniqueness", "Ein Sensor mit der gleichen Location und dem gleichen Namen existiert bereits.");
