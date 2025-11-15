@@ -12,8 +12,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Features\Usage\" />
-	  <Folder Include="Features\Person\" />
+		<Folder Include="Features\Device\" />
+		<Folder Include="Features\Usage\Command\" />
 	</ItemGroup>
 
 	<PropertyGroup>

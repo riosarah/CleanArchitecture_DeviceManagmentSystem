@@ -28,6 +28,9 @@ public static class DependencyInjection
 
         // Domain Services
         services.AddScoped<ISensorUniquenessChecker, SensorUniquenessChecker>();
+        services.AddScoped<IDeviceUniquenessChecker, DeviceUniquenessChecker>();
+        services.AddScoped<IPersonUniquenessChecker, PersonUniquenessChecker>();
+        services.AddScoped<IUsageUniquenessChecker, UsagesUniquenessChecker>();
 
         return services;
     }
