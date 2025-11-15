@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Device.Queries.GetAllDevices
 {
-    public sealed class GetAllDevicesQueryHandler(IUnitOfWork uow) : IRequestHandler<GetAllDevicesQuery, Result<IReadOnlyCollection<GetDeviceDto>>>
+    public sealed class GetAllDevicesQueryHandler(IUnitOfWork uow) 
+        : IRequestHandler<GetAllDevicesQuery, Result<IReadOnlyCollection<GetDeviceDto>>>
     {
         public async Task<Result<IReadOnlyCollection<GetDeviceDto>>> Handle(GetAllDevicesQuery request, CancellationToken cancellationToken)
         {
